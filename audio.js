@@ -13,6 +13,10 @@ function OnButtonClick() {
   //再生ファイル名の指定
   var Music_title = document.forms.bt1.MusicTitle.value;
 
+  //グラデーションの色の指定
+  var FirstColor = document.forms.bt1.FirstColor.value;
+  var SecondColor = document.forms.bt1.SecondColor.value;
+
   // canvasサイズをwindowサイズにする
   c.width = cw = window.innerWidth * 0.8;
   //cw = window.innerWidth / 1.0;//バーの横の大きさに影響する
@@ -61,11 +65,6 @@ function OnButtonClick() {
 
   // 読み込んだ音声データ(バッファ)を再生と波形データの描画を開始する。
   Loader.prototype.playSound = function (buffer) {
-
-    // var gainNode = context.createGain();
-    // buffer.connect(gainNode);
-    // gainNode.connect(context.destination);
-    // gainNode.gain.volue = 0.5;
     var visualizer = new Visualizer(buffer);
   };
 
@@ -82,20 +81,10 @@ function OnButtonClick() {
     this.sourceNode.connect(this.analyserNode);       // AudioBufferSourceNodeをAnalyserNodeに接続
     this.analyserNode.connect(audioCtx.destination);  // AnalyserNodeをAudioDestinationNodeに接続
 
-    // this.gainNode = analyserNode.createGain();
-    // this.sourceNode.connect(this.gainNode);
-    // this.gainNode.gain.value = 0.5;
-    // this.gainNode.connect(audioCtx.destination);
 
     this.sourceNode.start(0);                         // 再生開始
     this.draw();                                      // 描画開始
   };
-
-  // var R_num = 120.0;
-  // var G_num = 200.0;
-  // var B_num = 0.0;
-
-  // var B_c = 0;
 
   Visualizer.prototype.draw = function () {
     // 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
@@ -126,25 +115,6 @@ function OnButtonClick() {
       var height1 = ch * percent1 * 0.9; // %に基づく描画する高さを算出
       var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
 
-
-      //ここから色を変えるところ
-      // if (B_c == 0) {
-      //   B_num -= i/120;
-      // }
-      // else if (B_c == 1) {
-      //   B_num += i/120;
-      // }
-
-      // if (B_num < 0) {
-      //   B_num = 0;
-      //   B_c = 1;
-      // }
-      // else if (B_num > 255) {
-      //   B_num = 255;
-      //   B_c = 0;
-      // }
-      //ここまで
-
       //バーの位置
       var pos_x1 = i * barWidth;
       var pos_y1 = ch / 1.5;
@@ -154,17 +124,11 @@ function OnButtonClick() {
 
       //四角形にグラデーションを書く
       var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
-      grd1.addColorStop(0, "lightyellow");
-      grd1.addColorStop(0.5, "yellow");
+      grd1.addColorStop(0, FirstColor);
+      grd1.addColorStop(0.5, SecondColor);
       ctx.fillStyle = grd1;
       ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y2);
       ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
-
-      //ここからはグラデーションなしのやつ
-      // ctx.fillStyle = 'rgb(' + R_num.toString(10) + ', ' + G_num.toString(10) + ', ' + B_num.toString(10) + ')';
-      // ctx.strokeStyle = 'rgb(255,255,255)';
-      // ctx.fillRect((i) * barWidth, ch / 1.5, barWidth, -height1 / 1.5); // -をつけないと下に描画される
-      // ctx.fillRect((i) * barWidth, ch / 1.5, barWidth, height2 / 1.5);  //下側にも描画
 
     }
 
