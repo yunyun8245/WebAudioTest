@@ -88,7 +88,7 @@ function OnButtonClick() {
 
   Visualizer.prototype.draw = function () {
     // 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
-    this.analyserNode.smoothingTimeConstant = 0.7;
+    this.analyserNode.smoothingTimeConstant = 0.6;
 
     // FFTサイズを指定する。デフォルトは2048。
     this.analyserNode.fftSize = 2048;
@@ -110,9 +110,9 @@ function OnButtonClick() {
       var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
       var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
       //if (percent1*100 > 5) percent1 = 5/100;
-      if (percent1 * 100 < 2) percent1 = 2 / 100;
+      if (percent1 * 100 < 1) percent1 = 1 / 100;
 
-      var height1 = ch * percent1 * 0.9; // %に基づく描画する高さを算出
+      var height1 = ch * percent1 * 0.75; // %に基づく描画する高さを算出
       var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
 
       //バーの位置
