@@ -19,13 +19,13 @@
     <canvas id="canvas"></canvas>
     <script src="audio.js"></script>
     <div>バーの間隔をスライダーで決めてからボタンを押す。</div>
+
     <form name="Bt1" id="bt1">
-      <h3>
-        <input type="range" id="range" max="30" min="1" step="1" value="1">
-        <span id="value">1</span>
-      </h3>
+      <input type="range" id="range" max="30" min="1" step="1" value="1">
+      <span id="value">None</span>
       <script src="slider.js"></script>
       <input type="button" value="Play music！♪" onclick="OnButtonClick();"/>
+      <h4>音楽のタイトルを入力：<input type="text" id="MusicTitle" value="sample2.mp3"></h4>
     </form>
   </body>
 </html>

@@ -5,9 +5,13 @@ function OnButtonClick() {
   var cw;
   var ch;
 
+  //bar間隔の取得
   var step_bar_value = document.getElementById("output");     //index.htmlのidがoutputのやつに出力
   step_bar_value.innerText = document.forms.bt1.range.value;  //実際に代入
   var step_bar = parseInt(document.forms.bt1.range.value,10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
+
+  //再生ファイル名の指定
+  var Music_title = document.forms.bt1.MusicTitle.value;
 
   // canvasサイズをwindowサイズにする
   c.width = cw = window.innerWidth * 0.8;
@@ -177,7 +181,7 @@ function OnButtonClick() {
   };
 
   setUpRAF();
-  var loader = new Loader('sample2.mp3');
+  var loader = new Loader(Music_title);
   loader.loadBuffer();
 
 }
