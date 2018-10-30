@@ -6,7 +6,7 @@ function OnButtonClick() {
   var ch;
 
   // canvasサイズをwindowサイズにする
-  c.width = cw= window.innerWidth*0.8;
+  c.width = cw = window.innerWidth * 0.8;
   //cw = window.innerWidth / 1.0;//バーの横の大きさに影響する
   c.height = ch = window.innerHeight * 0.8;//波の領域の高さ
 
@@ -109,11 +109,11 @@ function OnButtonClick() {
     ctx.lineWidth = 10;
 
     // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
-    for (var i = 0; i < this.analyserNode.frequencyBinCount; i += 8) {
+    for (var i = 0; i < this.analyserNode.frequencyBinCount; i += 10) {
       var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
       var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
       //if (percent1*100 > 5) percent1 = 5/100;
-      if (percent1*100 < 2) percent1 = 2/100;
+      if (percent1 * 100 < 2) percent1 = 2 / 100;
 
       var height1 = ch * percent1 * 0.9; // %に基づく描画する高さを算出
       var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
@@ -136,13 +136,21 @@ function OnButtonClick() {
       //   B_c = 0;
       // }
       //ここまで
+
+      //バーの位置
+      var pos_x1 = i * barWidth;
+      var pos_y1 = ch / 1.5;
+      var pos_x2 = barWidth;
+      var pos_y2 = -height1 / 1.5;//上向き用
+      var pos_y3 = height2 / 1.5; //下向き用
+
       //四角形にグラデーションを書く
-      var grd1 = ctx.createLinearGradient((i) * barWidth, ch / 1.5, barWidth, -height1 / 1.5);
-      grd1.addColorStop(0,"white");
-      grd1.addColorStop(1,"yellow");
+      var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
+      grd1.addColorStop(0, "lightyellow");
+      grd1.addColorStop(0.5, "yellow");
       ctx.fillStyle = grd1;
-      ctx.fillRect((i) * barWidth, ch / 1.5, barWidth, -height1 / 1.5);
-      ctx.fillRect((i) * barWidth, ch / 1.5, barWidth, height2 / 1.5)
+      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y2);
+      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
 
       //ここからはグラデーションなしのやつ
       // ctx.fillStyle = 'rgb(' + R_num.toString(10) + ', ' + G_num.toString(10) + ', ' + B_num.toString(10) + ')';
