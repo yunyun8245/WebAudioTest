@@ -9,11 +9,23 @@
         color: #fff;
         background: #000;
       }
+      h3.t1{
+        text-align: left;
+      }
     </style>
   </head>
   <body>   
+    <h3 class="t1">Between bar : <span id="output"> None </span></h3>
     <canvas id="canvas"></canvas>
     <script src="audio.js"></script>
-    <input type="button" value="Play music" onclick="OnButtonClick();"/>
+    <div>バーの間隔をスライダーで決めてからボタンを押す。</div>
+    <form name="Bt1" id="bt1">
+      <h3>
+        <input type="range" id="range" max="30" min="1" step="1" value="1">
+        <span id="value">1</span>
+      </h3>
+      <script src="slider.js"></script>
+      <input type="button" value="Play music！♪" onclick="OnButtonClick();"/>
+    </form>
   </body>
 </html>

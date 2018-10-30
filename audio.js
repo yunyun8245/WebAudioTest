@@ -5,6 +5,10 @@ function OnButtonClick() {
   var cw;
   var ch;
 
+  var step_bar_value = document.getElementById("output");     //index.htmlのidがoutputのやつに出力
+  step_bar_value.innerText = document.forms.bt1.range.value;  //実際に代入
+  var step_bar = parseInt(document.forms.bt1.range.value,10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
+
   // canvasサイズをwindowサイズにする
   c.width = cw = window.innerWidth * 0.8;
   //cw = window.innerWidth / 1.0;//バーの横の大きさに影響する
@@ -83,11 +87,11 @@ function OnButtonClick() {
     this.draw();                                      // 描画開始
   };
 
-  var R_num = 120.0;
-  var G_num = 200.0;
-  var B_num = 0.0;
+  // var R_num = 120.0;
+  // var G_num = 200.0;
+  // var B_num = 0.0;
 
-  var B_c = 0;
+  // var B_c = 0;
 
   Visualizer.prototype.draw = function () {
     // 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
@@ -109,7 +113,7 @@ function OnButtonClick() {
     ctx.lineWidth = 10;
 
     // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
-    for (var i = 0; i < this.analyserNode.frequencyBinCount; i += 10) {
+    for (var i = 0; i < this.analyserNode.frequencyBinCount; i += step_bar) {
       var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
       var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
       //if (percent1*100 > 5) percent1 = 5/100;
