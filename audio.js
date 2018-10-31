@@ -18,7 +18,7 @@ function OnButtonClick() {
   var SecondColor = document.forms.bt1.SecondColor.value;
 
   // canvasサイズをwindowサイズにする
-  c.width = cw = window.innerWidth * 0.8;
+  c.width = cw = window.innerWidth * 0.85;
   //cw = window.innerWidth / 1.0;//バーの横の大きさに影響する
   c.height = ch = window.innerHeight * 0.8;//波の領域の高さ
 
@@ -88,7 +88,7 @@ function OnButtonClick() {
 
   Visualizer.prototype.draw = function () {
     // 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
-    this.analyserNode.smoothingTimeConstant = 0.6;
+    this.analyserNode.smoothingTimeConstant = 0.67
 
     // FFTサイズを指定する。デフォルトは2048。
     this.analyserNode.fftSize = 2048;
@@ -112,7 +112,7 @@ function OnButtonClick() {
       //if (percent1*100 > 5) percent1 = 5/100;
       if (percent1 * 100 < 1) percent1 = 1 / 100;
 
-      var height1 = ch * percent1 * 0.75; // %に基づく描画する高さを算出
+      var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
       var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
 
       //バーの位置
