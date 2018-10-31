@@ -1,5 +1,7 @@
 function OnButtonClick() {
 
+//TEst
+
   // canvas要素を取得
   var c = document.getElementById('canvas');
   var cw;
