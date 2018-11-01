@@ -112,7 +112,7 @@ function OnButtonClick() {
       var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
       var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
       //if (percent1*100 > 5) percent1 = 5/100;
-      if (percent1 * 100 < 12) percent1 = 12 / 100;
+      if (percent1 * 100 < 1) percent1 = 1 / 100;
 
       var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
       var height2 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
@@ -123,7 +123,7 @@ function OnButtonClick() {
 
       //円の中心
       var pos_c_x = cw / 2.0;
-      var pos_c_y = ch / 2.0;
+      var pos_c_y = ch / 2.0 -50;
       // //バーの先端（円の外周）算出のためにつか変数
       // var hoge_x = i;   //横軸の値を代入
       // var hoge_y;                  //縦軸の値を保存しておく変数
@@ -141,9 +141,9 @@ function OnButtonClick() {
       var pos_y3 = height2 / 2; //下向き用
 
       //canvasの回転
-      ctx.save();
+      ctx.save();         //セーブ
       ctx.translate(cw / 2, ch / 2);
-      ctx.rotate(((i/this.analyserNode.frequencyBinCount) * 360) * Math.PI / 180);
+      ctx.rotate(((i/this.analyserNode.frequencyBinCount) * 360*2) * Math.PI / 180);
       ctx.translate(-cw / 2, -ch / 2);
       //四角形にグラデーションを書く
       var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
@@ -152,9 +152,9 @@ function OnButtonClick() {
       ctx.fillStyle = grd1;
       // ctx.fillStyle = 'rgb(255,255,255)';
       // ctx.strokeStyle = 'rgb(255,255,255)';
-      ctx.fillRect(pos_c_x, pos_c_y, pos_x2, pos_y2);
+      ctx.fillRect(pos_c_x, pos_c_y, pos_x2*6, pos_y2);
       //ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
-      ctx.restore();
+      ctx.restore();      //ロード
     }
 
     window.requestAnimationFrame(this.draw.bind(this));
