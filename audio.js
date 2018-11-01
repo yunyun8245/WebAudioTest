@@ -1,5 +1,7 @@
 function OnButtonClick() {
 
+  //TEst
+
   // canvas要素を取得
   var c = document.getElementById('canvas');
   var cw;
@@ -8,7 +10,7 @@ function OnButtonClick() {
   //bar間隔の取得
   var step_bar_value = document.getElementById("output");     //index.htmlのidがoutputのやつに出力
   step_bar_value.innerText = document.forms.bt1.range.value;  //実際に代入
-  var step_bar = parseInt(document.forms.bt1.range.value,10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
+  var step_bar = parseInt(document.forms.bt1.range.value, 10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
 
   //再生ファイル名の指定
   var Music_title = document.forms.bt1.MusicTitle.value;
@@ -110,26 +112,49 @@ function OnButtonClick() {
       var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
       var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
       //if (percent1*100 > 5) percent1 = 5/100;
-      if (percent1 * 100 < 1) percent1 = 1 / 100;
+      if (percent1 * 100 < 12) percent1 = 12 / 100;
 
       var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
-      var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
+      var height2 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
 
-      //バーの位置
+      //＊バーの位置＊
+      //
+
+
+      //円の中心
+      var pos_c_x = cw / 2.0;
+      var pos_c_y = ch / 2.0;
+      // //バーの先端（円の外周）算出のためにつか変数
+      // var hoge_x = i;   //横軸の値を代入
+      // var hoge_y;                  //縦軸の値を保存しておく変数
+      // var Max_r = pos_c_y;         //半径の最大値を画面縦の高さの半分に設定（縦と横を同じにしたいから）
+      // var r = value1 / Max_r;      //半径の大きさ（バーの大きさ）を半径の最大値から算出
+
+      // //円の関数(iを横軸のx,valueを円の半径のrとして算出)
+      // hoge_y = Math.sqrt((r * r) - ((hoge_x - pos_c_x) * (hoge_x - pos_c_x))) + pos_c_y;
+
+
       var pos_x1 = i * barWidth;
-      var pos_y1 = ch / 1.5;
+      var pos_y1 = ch / 2;
       var pos_x2 = barWidth;
-      var pos_y2 = -height1 / 1.5;//上向き用
-      var pos_y3 = height2 / 1.5; //下向き用
+      var pos_y2 = -height1 / 2;//上向き用
+      var pos_y3 = height2 / 2; //下向き用
 
+      //canvasの回転
+      ctx.save();
+      ctx.translate(cw / 2, ch / 2);
+      ctx.rotate(((i/this.analyserNode.frequencyBinCount) * 360) * Math.PI / 180);
+      ctx.translate(-cw / 2, -ch / 2);
       //四角形にグラデーションを書く
       var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
       grd1.addColorStop(0, FirstColor);
       grd1.addColorStop(0.5, SecondColor);
       ctx.fillStyle = grd1;
-      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y2);
-      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
-
+      // ctx.fillStyle = 'rgb(255,255,255)';
+      // ctx.strokeStyle = 'rgb(255,255,255)';
+      ctx.fillRect(pos_c_x, pos_c_y, pos_x2, pos_y2);
+      //ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
+      ctx.restore();
     }
 
     window.requestAnimationFrame(this.draw.bind(this));
