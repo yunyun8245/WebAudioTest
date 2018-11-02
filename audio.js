@@ -1,6 +1,11 @@
-
-
+var ms_state = 0;
+var sourceNode;
 function OnButtonClick() {
+
+  if (ms_state == 1) {
+    sourceNode.stop(0);
+    ms_state = 2;
+  }
 
   // canvas要素を取得
   var c = document.getElementById('canvas');
@@ -82,16 +87,22 @@ function OnButtonClick() {
    * ビジュアライザー
    */
   var Visualizer = function (buffer) {
-    this.sourceNode = audioCtx.createBufferSource();  // AudioBufferSourceNodeを作成
-    this.sourceNode.buffer = buffer;                  // 取得した音声データ(バッファ)を音源に設定
+    if (ms_state == 0) {
+      sourceNode = audioCtx.createBufferSource();  // AudioBufferSourceNodeを作成
+      sourceNode.buffer = buffer;                  // 取得した音声データ(バッファ)を音源に設定
 
-    this.analyserNode = audioCtx.createAnalyser();    // AnalyserNodeを作成
-    this.freqs = new Uint8Array(this.analyserNode.frequencyBinCount);  // 周波数領域の波形データを格納する配列を生成 
-    this.sourceNode.connect(this.analyserNode);       // AudioBufferSourceNodeをAnalyserNodeに接続
-    this.analyserNode.connect(audioCtx.destination);  // AnalyserNodeをAudioDestinationNodeに接続
-
-    this.sourceNode.start(0);                         // 再生開始
-    this.draw();                                      // 描画開始
+      this.analyserNode = audioCtx.createAnalyser();    // AnalyserNodeを作成
+      this.freqs = new Uint8Array(this.analyserNode.frequencyBinCount);  // 周波数領域の波形データを格納する配列を生成 
+      sourceNode.connect(this.analyserNode);       // AudioBufferSourceNodeをAnalyserNodeに接続
+      this.analyserNode.connect(audioCtx.destination);  // AnalyserNodeをAudioDestinationNodeに接続
+      sourceNode.start(0);                         // 再生開始
+      this.draw();                                      // 描画開始
+      ms_state = 1;
+    }
+    if (ms_state == 2) {
+      audioCtx.close();
+      ms_state = 0;
+    }
   };
 
   Visualizer.prototype.draw = function () {
@@ -110,7 +121,7 @@ function OnButtonClick() {
 
     //ここで黒で書き直すことで画面がリセットされる
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-    ctx.fillRect(0, 0, cw * 1, ch);          //左下と右上の点を指定して四角形を描画
+    ctx.fillRect(0, 0, cw, ch);          //左下と右上の点を指定して四角形を描画
     ctx.lineWidth = 10;
 
     // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
