@@ -1,7 +1,5 @@
 function OnButtonClick() {
-
-  //TEst
-
+  
   // canvas要素を取得
   var c = document.getElementById('canvas');
   var cw;
@@ -18,6 +16,7 @@ function OnButtonClick() {
   //グラデーションの色の指定
   var FirstColor = document.forms.bt1.FirstColor.value;
   var SecondColor = document.forms.bt1.SecondColor.value;
+  var InnerBarColor = document.forms.bt1.InnerBarColor.value;
 
   // canvasサイズをwindowサイズにする
   c.width = cw = window.innerWidth * 0.85;
@@ -122,7 +121,7 @@ function OnButtonClick() {
 
 
       //円の中心
-      var pos_c_x = cw / 2.0;
+      var pos_c_x = cw / 4.0;//割る数字を変えると面白い。２がデフォルト。
       var pos_c_y = ch / 2.0 -50;
       // //バーの先端（円の外周）算出のためにつか変数
       // var hoge_x = i;   //横軸の値を代入
@@ -147,8 +146,16 @@ function OnButtonClick() {
       ctx.translate(-cw / 2, -ch / 2);
       //四角形にグラデーションを書く
       var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
-      grd1.addColorStop(0, FirstColor);
-      grd1.addColorStop(0.5, SecondColor);
+      if(i*2 > this.analyserNode.frequencyBinCount)
+      {
+        grd1.addColorStop(0, FirstColor);
+        grd1.addColorStop(1, InnerBarColor);
+      }
+      else
+      {
+        grd1.addColorStop(0, FirstColor);
+        grd1.addColorStop(0.5, SecondColor);  
+      }
       ctx.fillStyle = grd1;
       // ctx.fillStyle = 'rgb(255,255,255)';
       // ctx.strokeStyle = 'rgb(255,255,255)';
