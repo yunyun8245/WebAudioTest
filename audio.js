@@ -1,3 +1,5 @@
+
+
 function OnButtonClick() {
 
 //TEst
@@ -10,7 +12,13 @@ function OnButtonClick() {
   //bar間隔の取得
   var step_bar_value = document.getElementById("output");     //index.htmlのidがoutputのやつに出力
   step_bar_value.innerText = document.forms.bt1.range.value;  //実際に代入
-  var step_bar = parseInt(document.forms.bt1.range.value,10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
+  var step_bar = parseInt(document.forms.bt1.range.value, 10); //このスクリプトで使うために10進数へ変換して代入(fome id = "bt1",input type="range" から数値をとってきてる)
+
+  //barの太さ
+  var Bar_width = parseInt(document.forms.bt1.BarWidth.value, 10);
+
+  //barモードの切り替え
+  var ModeBar = parseInt(document.forms.bt1.barmode.value, 10);
 
   //再生ファイル名の指定
   var Music_title = document.forms.bt1.MusicTitle.value;
@@ -18,6 +26,7 @@ function OnButtonClick() {
   //グラデーションの色の指定
   var FirstColor = document.forms.bt1.FirstColor.value;
   var SecondColor = document.forms.bt1.SecondColor.value;
+  var InnerBarColor = document.forms.bt1.InnerBarColor.value;
 
   // canvasサイズをwindowサイズにする
   c.width = cw = window.innerWidth * 0.85;
@@ -83,7 +92,6 @@ function OnButtonClick() {
     this.sourceNode.connect(this.analyserNode);       // AudioBufferSourceNodeをAnalyserNodeに接続
     this.analyserNode.connect(audioCtx.destination);  // AnalyserNodeをAudioDestinationNodeに接続
 
-
     this.sourceNode.start(0);                         // 再生開始
     this.draw();                                      // 描画開始
   };
@@ -109,29 +117,67 @@ function OnButtonClick() {
 
     // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
     for (var i = 0; i < this.analyserNode.frequencyBinCount; i += step_bar) {
-      var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
-      var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
-      //if (percent1*100 > 5) percent1 = 5/100;
-      if (percent1 * 100 < 1) percent1 = 1 / 100;
+      if (ModeBar == 0) {
+        var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
+        var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。
+        if (percent1 * 100 < 1) percent1 = 1 / 100;
 
-      var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
-      var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
+        var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
+        var height2 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
 
-      //バーの位置
-      var pos_x1 = i * barWidth;
-      var pos_y1 = ch / 1.5;
-      var pos_x2 = barWidth;
-      var pos_y2 = -height1 / 1.5;//上向き用
-      var pos_y3 = height2 / 1.5; //下向き用
+        //円の中心
+        var pos_c_x = cw / 4.0;//割る数字を変えると面白い。２がデフォルト。
+        var pos_c_y = ch / 2.0 - 50;
+        //if(ModeBar == "1")pos_c_y = ch / 2.0;
+        var pos_x1 = i * barWidth;
+        var pos_y1 = ch / 2;
+        var pos_x2 = barWidth;
+        var pos_y2 = -height1 / 2;//上向き用
+        var pos_y3 = height2 / 2; //下向き用
 
-      //四角形にグラデーションを書く
-      var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
-      grd1.addColorStop(0, FirstColor);
-      grd1.addColorStop(0.5, SecondColor);
-      ctx.fillStyle = grd1;
-      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y2);
-      ctx.fillRect(pos_x1, pos_y1, pos_x2, pos_y3);
+        //canvasの回転
+        ctx.save();         //セーブ
+        ctx.translate(cw / 2, ch / 2);
+        ctx.rotate(((i / this.analyserNode.frequencyBinCount) * 360 * 2) * Math.PI / 180);
+        ctx.translate(-cw / 2, -ch / 2);
+        //四角形にグラデーションを書く
+        var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
+        if (i * 2 > this.analyserNode.frequencyBinCount) {
+          grd1.addColorStop(0, FirstColor);
+          grd1.addColorStop(1, InnerBarColor);
+        }
+        else {
+          grd1.addColorStop(0, FirstColor);
+          grd1.addColorStop(0.5, SecondColor);
+        }
+        ctx.fillStyle = grd1;
+        ctx.fillRect(pos_c_x, pos_c_y, pos_x2 * Bar_width, pos_y2);
+        ctx.restore();      //ロード
+      }
 
+      if (ModeBar == 1) {
+        var value1 = this.freqs[i];        // 配列には波形データ 0 ~ 255までの数値が格納されている。
+        var percent1 = value1 / 255;       // 255が最大値なので波形データの%が算出できる。   
+        if (percent1 * 100 < 1) percent1 = 1 / 100;
+
+        var height1 = ch * percent1 * 0.8; // %に基づく描画する高さを算出
+        var height2 = ch * percent1 * 0.3; // %に基づく描画する高さを算出
+
+        //バーの位置
+        var pos_x1 = i * barWidth;
+        var pos_y1 = ch / 1.5;
+        var pos_x2 = barWidth;
+        var pos_y2 = -height1 / 1.5;//上向き用
+        var pos_y3 = height2 / 1.5; //下向き用
+
+        //四角形にグラデーションを書く
+        var grd1 = ctx.createLinearGradient(pos_x1, pos_y1, pos_x1, pos_y2);
+        grd1.addColorStop(0, FirstColor);
+        grd1.addColorStop(0.5, SecondColor);
+        ctx.fillStyle = grd1;
+        ctx.fillRect(pos_x1, pos_y1, pos_x2 * Bar_width, pos_y2);
+        ctx.fillRect(pos_x1, pos_y1, pos_x2 * Bar_width, pos_y3);
+      }
     }
 
     window.requestAnimationFrame(this.draw.bind(this));
