@@ -107,7 +107,7 @@ function OnButtonClick() {
 
   Visualizer.prototype.draw = function () {
     // 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
-    this.analyserNode.smoothingTimeConstant = 0.67
+    this.analyserNode.smoothingTimeConstant = 0.5;
 
     // FFTサイズを指定する。デフォルトは2048。
     this.analyserNode.fftSize = 2048;
