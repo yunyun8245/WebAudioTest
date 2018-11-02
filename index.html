@@ -24,7 +24,7 @@
     <div>バーの間隔をスライダーで決めてからボタンを押す。</div>
 
     <form name="Bt1" id="bt1">
-      <input type="range" id="range" max="30" min="1" step="1" value="7">
+      <input type="range" id="range" max="30" min="1" step="1" value="5">
       <span id="value">None</span>
       <script src="slider.js"></script>
       <input type="button" value="Play music！♪" onclick="OnButtonClick();"/>
@@ -40,12 +40,19 @@
           <option value="sample7.mp3">Moning haze</option>
         </select>
       </h4>
+      <h4>バーのモード選択 : 
+        <select id="barmode">
+          <option value="0" selected>Circle</option>
+          <option value="1">Liner</option>
+        </select>
+        バーの太さ選択 : <input type="text" id="BarWidth" value="2" size="4">
+      </h4>
       <h4> グラデーションカラーの始点と終点の色を指定
         Start：<input type="text" id="FirstColor" value="lightyellow" size="8">
         Finish:：<input type="text" id="SecondColor" value="yellow" size="8">
       </h4>
       <h4>内側のバーのグラデーションカラーの指定
-        InnerBarColorSecond：<input type="text" id="InnerBarColor" value="blue" size="8">
+        InnerBarColor：<input type="text" id="InnerBarColor" value="blue" size="8">
       </h4>
     </form>
   </body>
